@@ -26,4 +26,4 @@ Facilitar o gerenciamento de pedidos, encomendas e vendas realizadas em cantinas
 
 ## Statuss
 
-🚧 Em desenvolvimento
+🚧 Em desenvolvimentooo
