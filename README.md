@@ -24,6 +24,6 @@ Facilitar o gerenciamento de pedidos, encomendas e vendas realizadas em cantinas
 - CSS
 - JavaScript
 
-## Statuss
+## Status
 
-🚧 Em desenvolvimentooo
+🚧 Em desenvolvimento
