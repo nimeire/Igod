@@ -22,7 +22,17 @@ import java.math.BigDecimal;
         OUTROS
     }
 
-
+    @Id
+    @SequenceGenerator(
+            name = "produto_sequence",
+            sequenceName = "seq_produto",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "produto_sequence"
+    )
+    private Long id;
 
     @Column(nullable = false, length = 100)
     private String  nome;
