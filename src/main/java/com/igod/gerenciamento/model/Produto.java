@@ -37,7 +37,7 @@ import java.math.BigDecimal;
     @Column(nullable = false, length = 100)
     private String  nome;
 
-    @Column(precision = 10, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
