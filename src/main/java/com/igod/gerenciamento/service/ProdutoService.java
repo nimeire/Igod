@@ -17,16 +17,9 @@ import java.util.Optional;
     }
 
     public Produto salvar(Produto produto) {
-
-        System.out.println("========== CHEGUEI NO SERVICE ==========");
-        System.out.println("Disponível antes: " + produto.getDisponivel());
-
         if (produto.getDisponivel() == null) {
             produto.setDisponivel(true);
         }
-
-        System.out.println("Disponível depois: " + produto.getDisponivel());
-
         return produtoRepository.save(produto);
     }
 
@@ -39,6 +32,12 @@ import java.util.Optional;
        produto.setDisponivel(false);
        return salvar(produto);
     }
-
+    public Produto atualizar(Long id, Produto produto) {
+        Produto produtoExistente = buscarPorID(id).get();
+    produtoExistente.setNome(produto.getNome());
+    produtoExistente.setValor(produto.getValor());
+    produtoExistente.setCategoria(produto.getCategoria());
+    return salvar(produtoExistente);
+    }
 
 }
