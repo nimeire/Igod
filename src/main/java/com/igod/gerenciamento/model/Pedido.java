@@ -1,5 +1,6 @@
 package com.igod.gerenciamento.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,8 @@ import java.util.List;
     public enum StatusPedido{
         AGUARDANDO,
         EM_PREPARO,
-        FINALIZADO
+        PRONTO,
+        ENTREGUE
     }
     public enum TipoPedido{
         RETIRADA,
@@ -34,11 +36,16 @@ import java.util.List;
         DINHEIRO
 
     }
+    @JsonIgnore
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens;
 
     @ManyToOne
-    @JoinColumn(name = "culto_id", nullable = false)
+    @JoinColumn(name = "estacao_id")
+    private Estacao estacao;
+
+    @ManyToOne
+    @JoinColumn(name = "culto_id")
     private Culto culto;
 
     @Id
@@ -53,8 +60,11 @@ import java.util.List;
     )
     private Long id;
 
-    @Column (nullable = false)
+    @Column
     private Integer senha;
+
+    @Column(length = 500)
+    private String observacoes;
 
     @Enumerated(EnumType.STRING)
     private StatusPedido  status = StatusPedido.AGUARDANDO;
@@ -65,11 +75,12 @@ import java.util.List;
     @Enumerated(EnumType.STRING)
     private FormaPagamento pagamento;
 
-    @Column(precision = 10, scale = 2)
+    @Column( precision = 10, scale = 2)
     private BigDecimal total;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy  HH:mm:ss", timezone = "America/Sao_Paulo")
     private LocalDateTime dataPedido = LocalDateTime.now();
+
 
 
 }

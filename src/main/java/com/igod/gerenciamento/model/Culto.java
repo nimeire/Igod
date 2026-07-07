@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Getter
@@ -32,6 +33,7 @@ import java.util.List;
     )
     private Long id;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "culto")
     private List<Pedido> pedidos;
 

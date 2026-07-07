@@ -1,4 +1,5 @@
 package com.igod.gerenciamento.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ import java.math.BigDecimal;
     )
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
@@ -35,18 +37,13 @@ import java.math.BigDecimal;
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
-    @Column(precision = 10, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precoUnitario;
 
-    @Column(precision = 10, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
 
+    @Column(nullable = false)
     private Integer quantidade;
-
-
-
-
-
-
 
 }

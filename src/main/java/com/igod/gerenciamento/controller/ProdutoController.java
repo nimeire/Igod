@@ -27,6 +27,7 @@ public class ProdutoController {
     }
     @PatchMapping("/{id}/inativar")
     public Produto inativarProduto(@PathVariable Long id){
+
         return produtoService.inativarProduto(id);
     }
     @PutMapping("/{id}")

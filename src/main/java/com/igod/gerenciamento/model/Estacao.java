@@ -2,6 +2,8 @@ package com.igod.gerenciamento.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -32,6 +34,7 @@ import lombok.*;
     @Column(nullable = false, length = 100)
     private StatusEstacao status;
 
+    private LocalDateTime ultimaLiberacao;
 
 
 
