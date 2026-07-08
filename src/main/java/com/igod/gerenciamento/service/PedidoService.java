@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,6 @@ public class PedidoService {
         if (ultimoPedido.isPresent()) {
             return ultimoPedido.get().getSenha() + 1;
         }
-
         return 1;
     }
 
@@ -74,6 +74,18 @@ public class PedidoService {
         estacaoService.salvar(estacao);
         return pedidoRepository.save(pedido);
 
+    }
+    public Pedido marcarComoEntregue(Long id){
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        pedido.setStatus(Pedido.StatusPedido.ENTREGUE);
+        return pedidoRepository.save(pedido);
+
+    }
+
+    public List<Pedido> buscarPedidosPorStatus(Pedido.StatusPedido status){
+        return pedidoRepository.findByStatus(status);
     }
 
 

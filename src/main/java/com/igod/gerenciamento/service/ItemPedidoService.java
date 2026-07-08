@@ -45,10 +45,7 @@ public class ItemPedidoService {
         atualizarTotalPedido(pedido);
 
         return itemSalvo;
-
-
     }
-
     private void atualizarTotalPedido(Pedido pedido){
 
         List<ItemPedido> itens = itemPedidoRepository.findByPedido(pedido);
