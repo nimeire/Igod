@@ -45,4 +45,5 @@ public class PedidoController {
     public Pedido marcarComoEntregue(@PathVariable Long id) {
         return pedidoService.marcarComoEntregue(id);
     }
+
 }

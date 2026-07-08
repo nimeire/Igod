@@ -1,4 +1,5 @@
 package com.igod.gerenciamento.repository;
+import com.igod.gerenciamento.model.Estacao;
 import com.igod.gerenciamento.model.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
@@ -10,5 +11,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     Optional<Pedido> findTopByStatusOrderBySenhaAsc(Pedido.StatusPedido status);
 
+    Optional<Pedido> findByEstacaoAndStatus(Estacao estacao, Pedido.StatusPedido status);
+
     List<Pedido> findByStatus(Pedido.StatusPedido status);
+
 }

@@ -60,6 +60,9 @@ import java.util.List;
     )
     private Long id;
 
+    @Column(nullable = false, length = 100)
+    private String nomeResponsavel;
+
     @Column
     private Integer senha;
 
