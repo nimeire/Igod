@@ -1,4 +1,4 @@
-package com.igod.gerenciamento.controller;
+package com.igod.gerenciamento.controller.api;
 
 import com.igod.gerenciamento.model.Produto;
 import com.igod.gerenciamento.service.ProdutoService;
