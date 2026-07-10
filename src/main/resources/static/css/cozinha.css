@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+}
+
+.topo {
+    background: #e30613;
+    color: white;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.estacao {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.container {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: white;
+}
+
+.conteudo {
+    padding: 28px 18px;
+}
+
+.status {
+    text-align: center;
+    font-weight: 700;
+    color: #087c3a;
+    background: #e8f8ee;
+    padding: 8px 16px;
+    border-radius: 999px;
+    width: fit-content;
+    margin: 0 auto 18px;
+}
+
+.titulo {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.senha {
+    text-align: center;
+    font-size: 76px;
+    font-weight: 900;
+    color: #e30613;
+    margin: 10px 0 20px;
+}
+
+.card-pedido {
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+.responsavel {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.item {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 20px;
+}
+
+.quantidade {
+    font-size: 28px;
+    font-weight: 900;
+    color: #e30613;
+    min-width: 54px;
+}
+
+.produto {
+    font-weight: 600;
+}
+
+.botao-feito {
+    width: 100%;
+    border: none;
+    background: #e30613;
+    color: white;
+    font-size: 24px;
+    font-weight: 900;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 26px;
+    cursor: pointer;
+}
+
+.rodape {
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+    margin-top: 16px;
+}
+
+.vazio h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.vazio p {
+    color: #666;
+    font-size: 16px;
+}

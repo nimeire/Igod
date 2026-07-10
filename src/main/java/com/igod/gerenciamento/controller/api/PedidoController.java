@@ -17,6 +17,23 @@ public class PedidoController {
     private final PedidoService pedidoService;
     private final ItemPedidoService itemPedidoService;
 
+
+    @DeleteMapping("/limpar-testes")
+    public String limparPedidosDeTeste() {
+
+        pedidoService.limparPedidosDeTeste();
+
+        return "Pedidos de teste removidos e estações liberadas!";
+    }
+
+    @PostMapping("/popular")
+    public String popularBanco() {
+
+        pedidoService.popularBanco();
+
+        return "Banco populado com sucesso!";
+    }
+
     @PostMapping
     public Pedido criarPedido(@RequestBody Pedido pedido) {
 
@@ -31,14 +48,14 @@ public class PedidoController {
         return itemPedidoService.adicionarItem(pedidoId, request);
     }
 
-    @PatchMapping("/{id}/pronto")
-    public Pedido marcarComoPronto(@PathVariable Long id) {
-        return pedidoService.marcarComoPronto(id);
-    }
-
     @GetMapping("/status/{status}")
     public List<Pedido> buscarPedidosPorStatus(@PathVariable("status") Pedido.StatusPedido status) {
         return pedidoService.buscarPedidosPorStatus(status);
+    }
+
+    @PatchMapping("/{id}/pronto")
+    public Pedido marcarComoPronto(@PathVariable Long id) {
+        return pedidoService.marcarComoPronto(id);
     }
 
     @PatchMapping("/{id}/entregue")

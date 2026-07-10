@@ -4,33 +4,75 @@
     <meta charset="UTF-8">
     <title>iGOD - Cozinha</title>
     <link rel="stylesheet" th:href="@{/css/cozinha.css}">
+    <meta http-equiv="refresh" content="5">
 </head>
 <body>
 <div class="container">
 
-    <h1>iGOD</h1>
+    <header class="topo">
+        <div class="logo"> iGOD</div>
+        <div class="estacao">
+            Estação <span th:text="${estacaoId}"></span>
+        </div>
+    </header>
 
-    <h2>
-        Estação
-        <span th:text="${estacaoId}"></span>
-    </h2>
+    <main class="conteudo">
 
-    <div class="card-pedido">
+        <div class="card-pedido" th:if="${pedido != null}">
 
-        <h3>Pedido Atual</h3>
+            <div class="status"> EM PREPARO</div>
 
-        <h1>#001</h1>
+            <div class="titulo">Pedido Atual</div>
 
-        <p> Nome do responsável</p>
+            <div class="senha">
+                #<span th:text="${#numbers.formatInteger(pedido.senha, 3)}"></span>
+            </div>
 
-        <p> 2x Caldinho Surpresa</p>
+            <div class="responsavel">
+                👤 <span th:text="${pedido.nomeResponsavel}"></span>
+            </div>
 
-        <p> 1x Bolo de Chocolate</p>
+            <div th:each="item : ${pedido.itens}" class="item">
+                <span class="quantidade" th:text="${item.quantidade + 'x'}"></span>
+                <span class="produto" th:text="${item.produto.nome}"></span>
+            </div>
+            <form
+                    th:action="@{'/cozinha/' + ${estacaoId} + '/pedido/' + ${pedido.id} + '/feito'}"
+                  method="post"
+                  onsubmit="return finalizarPedido(this)">
+                    <button class="botao-feito" type="submit">
+                        ✓ PEDIDO FEITO
+                    </button>
+            </form>
 
-        <button>Pedido Feito</button>
+            <div class="rodape">
+                Próximo pedido será carregado automaticamente
+            </div>
 
-    </div>
+        </div>
 
+        <div class="card-pedido vazio" th:if="${pedido == null}">
+            <h2>Nenhum pedido no momento</h2>
+            <p>Aguardando próximo pedido...</p>
+        </div>
+
+    </main>
 </div>
+
+<script>
+    function finalizarPedido(form) {
+
+        const botao = form.querySelector("button");
+
+        botao.disabled = true;
+        botao.innerText = "FINALIZANDO...";
+
+        setTimeout(() => {
+            form.submit();
+        }, 1000);
+
+        return false;
+    }
+</script>
 </body>
 </html>
