@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iGOD - Caixa</title>
+    <link rel="stylesheet" th:href="@{/css/caixa.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <header class="topo">
+        <div class="logo">iGOD</div>
+        <div class="titulo-topo">Novo Pedido</div>
+    </header>
+
+    <main class="conteudo-caixa">
+
+        <section class="area-produtos">
+            <h2>Produtos</h2>
+
+            <div class="grade-produtos">
+
+                <!-- Corrigido: Removido o '>' que estava duplicado após o fechamento da tag -->
+                <div class="produto-card" th:each="produto : ${produtos}">
+                    <strong th:text="${produto.nome}"></strong>
+                    <span th:text="'R$ ' + ${produto.valor}"></span>
+
+                    <div class="controle-quantidade">
+                        <button type="button">−</button>
+                        <span>0</span>
+                        <button type="button">+</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <aside class="resumo-pedido">
+
+            <h2>Resumo do Pedido</h2>
+
+            <div class="lista-resumo">
+                <p>Nenhum item selecionado</p>
+            </div>
+
+            <label class="opcao-encomenda">
+                <input type="checkbox">
+                Encomenda
+            </label>
+
+            <div class="observacoes-resumo">
+                <label>Observações</label>
+                <textarea id="observacoes" placeholder="Ex: sem cebola"></textarea>
+            </div>
+
+            <div class="total-resumo">
+                <span>Total</span>
+                <strong>R$ 0,00</strong>
+            </div>
+
+            <div class="pagamento-resumo">
+                <h3>Forma de pagamento</h3>
+
+                <div class="opcoes-pagamento">
+
+                    <button type="button" class="opcao" data-valor="PIX">PIX</button>
+                    <button type="button" class="opcao" data-valor="DINHEIRO">Dinheiro</button>
+                    <button type="button" class="opcao" data-valor="DEBITO">Débito</button>
+                    <button type="button" class="opcao" data-valor="CREDITO">Crédito</button>
+
+                </div>
+            </div>
+
+            <script>
+                let formaPagamento = "";
+
+                document.querySelectorAll(".opcao").forEach(btn => {
+                    btn.addEventListener("click", () => {
+
+                        document.querySelectorAll(".opcao")
+                            .forEach(b => b.classList.remove("ativo"));
+
+                        btn.classList.add("ativo");
+
+                        formaPagamento = btn.dataset.valor;
+                    });
+                });
+            </script>
+
+            <button class="botao-enviar">
+                Enviar para cantina
+            </button>
+
+        </aside>
+
+    </main>
+</div>
+
+</body>
+</html>

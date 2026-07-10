@@ -1,6 +1,8 @@
 package com.igod.gerenciamento.controller.web;
 
 import com.igod.gerenciamento.model.Pedido;
+import com.igod.gerenciamento.model.Produto;
+import com.igod.gerenciamento.repository.ProdutoRepository;
 import com.igod.gerenciamento.service.EstacaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,13 +11,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.igod.gerenciamento.service.PedidoService;
+
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class TelaController {
+
     private final EstacaoService estacaoService;
     private final PedidoService pedidoService;
+    private final ProdutoRepository produtoRepository;
+
+    @GetMapping("/caixa")
+    public String caixa(Model model) {
+
+        List<Produto> produtos = produtoRepository.findAll();
+
+        model.addAttribute("produtos", produtos);
+
+        return "caixa";
+    }
 
     @GetMapping("/cozinha/{id}")
     public String cozinha(@PathVariable Long id, Model model) {
