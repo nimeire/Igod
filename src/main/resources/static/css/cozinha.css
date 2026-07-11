@@ -29,14 +29,16 @@ body {
 }
 
 .container {
-    max-width: 430px;
-    margin: 0 auto;
+    width: 100%;
     min-height: 100vh;
     background: white;
 }
 
 .conteudo {
-    padding: 28px 18px;
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 16px 12px;
 }
 
 .status {
@@ -65,10 +67,11 @@ body {
 }
 
 .card-pedido {
-    border: 1px solid #eee;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    background: white;
+    padding: 16px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
 }
 
 .responsavel {
@@ -98,16 +101,39 @@ body {
 }
 
 .botao-feito {
-    width: 100%;
-    border: none;
     background: #e30613;
     color: white;
-    font-size: 24px;
-    font-weight: 900;
-    padding: 20px;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 700;
     border-radius: 10px;
-    margin-top: 26px;
     cursor: pointer;
+    margin-top: 18px;
+    letter-spacing: .3px;
+    transition: .2s;
+    box-shadow: 0 4px 12px rgba(227,6,19,.25);
+}
+
+.botao-feito:hover:not(:disabled) {
+    background: #c00511;
+}
+
+.botao-feito:active:not(:disabled) {
+    transform: scale(.98);
+}
+
+.botao-feito:focus-visible {
+    outline: 3px solid #ffb3ab;
+    outline-offset: 2px;
+}
+
+.botao-feito:disabled {
+    background: #b0b0b0;
+    color: #f0f0f0;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .rodape {
@@ -115,6 +141,14 @@ body {
     color: #777;
     font-size: 14px;
     margin-top: 16px;
+}
+
+.vazio {
+    background: white;
+    padding: 60px 20px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
 }
 
 .vazio h2 {
@@ -125,4 +159,142 @@ body {
 .vazio p {
     color: #666;
     font-size: 16px;
+}
+
+.badge-encomenda {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #e30613;
+    background: #fdecea;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: .5px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #f5b7b1;
+    width: fit-content;
+    margin: 0 auto 14px;
+}
+
+.observacoes {
+    text-align: center;
+    background: #fff8e6;
+    border: 1px solid #ffe4a3;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #6b5300;
+    margin-bottom: 18px;
+}
+
+/* ================= CELULARES PEQUENOS ================= */
+
+@media (max-width:380px){
+
+    .topo{
+        padding:16px;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .estacao{
+        font-size:15px;
+    }
+
+    .conteudo{
+        padding:12px 10px;
+    }
+
+    .senha{
+        font-size:58px;
+    }
+
+    .titulo{
+        font-size:16px;
+    }
+
+    .responsavel{
+        font-size:18px;
+    }
+
+    .item{
+        font-size:16px;
+        gap:10px;
+    }
+
+    .quantidade{
+        font-size:22px;
+        min-width:40px;
+    }
+
+    .botao-feito{
+        font-size:16px;
+        padding:14px;
+    }
+
+}
+
+/* ================= TABLETS ================= */
+
+@media (min-width:768px){
+
+    .conteudo{
+        max-width:550px;
+        padding:24px;
+    }
+
+    .senha{
+        font-size:90px;
+    }
+
+    .responsavel{
+        font-size:24px;
+    }
+
+    .item{
+        font-size:22px;
+    }
+
+    .quantidade{
+        font-size:32px;
+        min-width:60px;
+    }
+
+}
+
+/* ================= DESKTOP / TV ================= */
+
+@media (min-width:1200px){
+
+    .conteudo{
+        max-width:700px;
+    }
+
+    .senha{
+        font-size:110px;
+    }
+
+    .responsavel{
+        font-size:28px;
+    }
+
+    .item{
+        font-size:26px;
+        padding:16px 0;
+    }
+
+    .quantidade{
+        font-size:38px;
+        min-width:70px;
+    }
+
+    .botao-feito{
+        font-size:22px;
+        padding:20px;
+    }
+
 }

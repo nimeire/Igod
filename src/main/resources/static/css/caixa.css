@@ -55,14 +55,19 @@ body {
 }
 
 .produto-card {
-    border: 1px solid #eee;
+    border: 2px solid #e30613;
     border-radius: 14px;
     padding: 16px;
     background: white;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(227, 6, 19, 0.08);
     display: flex;
     flex-direction: column;
     gap: 8px;
+    transition: box-shadow 0.15s ease;
+}
+
+.produto-card:hover {
+    box-shadow: 0 4px 14px rgba(227, 6, 19, 0.18);
 }
 
 .produto-card strong {
@@ -104,13 +109,39 @@ body {
 /* ===== RESUMO ===== */
 
 .resumo-pedido {
+    border: 2px solid #e30613;
     border-radius: 14px;
     padding: 20px;
     background: white;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(227, 6, 19, 0.08);
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+/* Nome do responsável */
+.campo-nome-responsavel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.campo-nome-responsavel label {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.campo-nome-responsavel input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.campo-nome-responsavel input:focus {
+    outline: none;
+    border-color: #e30613;
 }
 
 .lista-resumo {
@@ -119,6 +150,20 @@ body {
     padding: 16px;
     text-align: center;
     color: #777;
+}
+
+/* Cada linha de item dentro do resumo (gerada pelo JS) */
+.item-resumo {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+    color: #222;
+    text-align: left;
+}
+
+.item-resumo:not(:last-child) {
+    border-bottom: 1px solid #eee;
 }
 
 .opcao-encomenda {
@@ -177,7 +222,7 @@ body {
 }
 
 /* ===== BOTÃO ===== */
-
+/* No desktop ele é só um botão normal, alinhado com o padding do conteúdo */
 .botao-enviar {
     background: #e30613;
     color: white;
@@ -187,14 +232,82 @@ body {
     font-weight: 700;
     border-radius: 10px;
     cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
+    width: calc(100% - 48px);
+    margin: 0 24px 24px;
     transition: background 0.2s ease;
 }
 
 .botao-enviar:hover {
-    background: #b5050f; /* Um tom mais escuro para o efeito de passar o mouse */
+    background: #b5050f;
 }
+
+/* ===== MODAL DE PEDIDO ENVIADO ===== */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+}
+
+.modal-overlay.visivel {
+    display: flex;
+}
+
+.modal-caixa {
+    background: white;
+    border: 3px solid #e30613;
+    border-radius: 18px;
+    padding: 32px 28px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.modal-caixa h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.modal-texto {
+    margin: 0;
+    color: #555;
+}
+
+.modal-senha {
+    font-size: 56px;
+    font-weight: 900;
+    color: #e30613;
+    margin: 8px 0 12px;
+}
+
+.modal-subtexto {
+    margin: 0 0 20px;
+    color: #555;
+    font-size: 14px;
+}
+
+.modal-ok {
+    background: #e30613;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.modal-ok:hover {
+    background: #b5050f;
+}
+
 /* ===== RESPONSIVO ===== */
 
 @media (max-width: 800px) {
@@ -205,5 +318,20 @@ body {
 
     .grade-produtos {
         grid-template-columns: 1fr;
+    }
+
+    /* Só no mobile o botão vira uma barra fixa colada embaixo da tela */
+    body {
+        padding-bottom: 90px;
+    }
+
+    .botao-enviar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        z-index: 100;
     }
 }

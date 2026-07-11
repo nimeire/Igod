@@ -22,6 +22,11 @@
 
             <div class="status"> EM PREPARO</div>
 
+            <div class="badge-encomenda"
+                 th:if="${pedido.tipo != null and pedido.tipo.name() == 'ENCOMENDA'}">
+                 ENCOMENDA
+            </div>
+
             <div class="titulo">Pedido Atual</div>
 
             <div class="senha">
@@ -32,17 +37,23 @@
                 👤 <span th:text="${pedido.nomeResponsavel}"></span>
             </div>
 
+            <div class="observacoes"
+                 th:if="${pedido.observacoes != null and !pedido.observacoes.isEmpty()}">
+                OBSERVAÇÃO: <br>
+                <span th:text="${pedido.observacoes}"></span>
+            </div>
+
             <div th:each="item : ${pedido.itens}" class="item">
                 <span class="quantidade" th:text="${item.quantidade + 'x'}"></span>
                 <span class="produto" th:text="${item.produto.nome}"></span>
             </div>
             <form
                     th:action="@{'/cozinha/' + ${estacaoId} + '/pedido/' + ${pedido.id} + '/feito'}"
-                  method="post"
-                  onsubmit="return finalizarPedido(this)">
-                    <button class="botao-feito" type="submit">
-                        ✓ PEDIDO FEITO
-                    </button>
+                    method="post"
+                    onsubmit="return finalizarPedido(this)">
+                <button class="botao-feito" type="submit">
+                    ✓ PEDIDO FEITO
+                </button>
             </form>
 
             <div class="rodape">

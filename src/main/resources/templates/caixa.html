@@ -22,15 +22,19 @@
 
             <div class="grade-produtos">
 
-                <!-- Corrigido: Removido o '>' que estava duplicado após o fechamento da tag -->
-                <div class="produto-card" th:each="produto : ${produtos}">
+                <div class="produto-card"
+                     th:each="produto : ${produtos}"
+                     th:data-id="${produto.id}"
+                     th:data-nome="${produto.nome}"
+                     th:data-valor="${produto.valor}">
+
                     <strong th:text="${produto.nome}"></strong>
                     <span th:text="'R$ ' + ${produto.valor}"></span>
 
                     <div class="controle-quantidade">
-                        <button type="button">−</button>
-                        <span>0</span>
-                        <button type="button">+</button>
+                        <button type="button" class="btn-menos">−</button>
+                        <span class="quantidade-item">0</span>
+                        <button type="button" class="btn-mais">+</button>
                     </div>
                 </div>
 
@@ -41,12 +45,17 @@
 
             <h2>Resumo do Pedido</h2>
 
-            <div class="lista-resumo">
+            <div class="campo-nome-responsavel">
+                <label for="nomeResponsavel">Nome do responsável</label>
+                <input type="text" id="nomeResponsavel" placeholder="Ex: Maria">
+            </div>
+
+            <div class="lista-resumo" id="listaResumo">
                 <p>Nenhum item selecionado</p>
             </div>
 
             <label class="opcao-encomenda">
-                <input type="checkbox">
+                <input type="checkbox" id="checkboxEncomenda">
                 Encomenda
             </label>
 
@@ -57,46 +66,229 @@
 
             <div class="total-resumo">
                 <span>Total</span>
-                <strong>R$ 0,00</strong>
+                <strong id="totalPedido">R$ 0,00</strong>
             </div>
 
             <div class="pagamento-resumo">
                 <h3>Forma de pagamento</h3>
 
                 <div class="opcoes-pagamento">
-
                     <button type="button" class="opcao" data-valor="PIX">PIX</button>
                     <button type="button" class="opcao" data-valor="DINHEIRO">Dinheiro</button>
                     <button type="button" class="opcao" data-valor="DEBITO">Débito</button>
                     <button type="button" class="opcao" data-valor="CREDITO">Crédito</button>
-
                 </div>
             </div>
-
-            <script>
-                let formaPagamento = "";
-
-                document.querySelectorAll(".opcao").forEach(btn => {
-                    btn.addEventListener("click", () => {
-
-                        document.querySelectorAll(".opcao")
-                            .forEach(b => b.classList.remove("ativo"));
-
-                        btn.classList.add("ativo");
-
-                        formaPagamento = btn.dataset.valor;
-                    });
-                });
-            </script>
-
-            <button class="botao-enviar">
-                Enviar para cantina
-            </button>
 
         </aside>
 
     </main>
+
+    <button class="botao-enviar" id="botaoEnviar">
+        Enviar para cantina
+    </button>
+
+    <!-- Modal de confirmação, some por padrão. O JS mostra ele quando o pedido é aceito -->
+    <div class="modal-overlay" id="modalPedidoEnviado">
+        <div class="modal-caixa">
+            <h2>Pedido enviado!</h2>
+            <p class="modal-texto">Sua senha é</p>
+            <div class="modal-senha" id="modalSenhaValor">--</div>
+            <p class="modal-subtexto" id="modalTipoTexto">Aguarde a chamada na cozinha.</p>
+            <button class="modal-ok" id="modalOkBtn">OK</button>
+        </div>
+    </div>
+
 </div>
+
+<script th:inline="javascript">
+
+    // ---------- ESTADO DO CARRINHO ----------
+    // "carrinho" guarda os itens escolhidos.
+    // Chave = id do produto, valor = {nome, valor unitário, quantidade}
+    const carrinho = {};
+
+    let formaPagamento = "";
+
+    // ---------- FORMA DE PAGAMENTO ----------
+    document.querySelectorAll(".opcao").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".opcao")
+                .forEach(b => b.classList.remove("ativo"));
+
+            btn.classList.add("ativo");
+            formaPagamento = btn.dataset.valor;
+        });
+    });
+
+    // ---------- BOTÕES + E - ----------
+    document.querySelectorAll(".produto-card").forEach(card => {
+
+        const id = card.dataset.id;
+        const nome = card.dataset.nome;
+        const valor = parseFloat(card.dataset.valor);
+
+        const spanQtd = card.querySelector(".quantidade-item");
+        const btnMais = card.querySelector(".btn-mais");
+        const btnMenos = card.querySelector(".btn-menos");
+
+        btnMais.addEventListener("click", () => {
+            const qtdAtual = carrinho[id] ? carrinho[id].quantidade : 0;
+            const novaQtd = qtdAtual + 1;
+
+            carrinho[id] = { nome, valor, quantidade: novaQtd };
+            spanQtd.textContent = novaQtd;
+
+            atualizarResumo();
+        });
+
+        btnMenos.addEventListener("click", () => {
+            if (!carrinho[id] || carrinho[id].quantidade === 0) return;
+
+            const novaQtd = carrinho[id].quantidade - 1;
+
+            if (novaQtd === 0) {
+                delete carrinho[id];
+            } else {
+                carrinho[id].quantidade = novaQtd;
+            }
+
+            spanQtd.textContent = novaQtd;
+            atualizarResumo();
+        });
+    });
+
+    // ---------- ATUALIZA RESUMO E TOTAL ----------
+    function atualizarResumo() {
+        const listaResumo = document.getElementById("listaResumo");
+        const totalPedido = document.getElementById("totalPedido");
+
+        const ids = Object.keys(carrinho);
+
+        if (ids.length === 0) {
+            listaResumo.innerHTML = "<p>Nenhum item selecionado</p>";
+            totalPedido.textContent = "R$ 0,00";
+            return;
+        }
+
+        let total = 0;
+        let html = "";
+
+        ids.forEach(id => {
+            const item = carrinho[id];
+            const subtotal = item.valor * item.quantidade;
+            total += subtotal;
+
+            html += `
+                <div class="item-resumo">
+                    <span>${item.quantidade}x ${item.nome}</span>
+                    <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                </div>
+            `;
+        });
+
+        listaResumo.innerHTML = html;
+        totalPedido.textContent = "R$ " + total.toFixed(2).replace('.', ',');
+    }
+
+    // ---------- ENVIAR PEDIDO ----------
+    document.getElementById("botaoEnviar").addEventListener("click", async () => {
+
+        const nomeResponsavel = document.getElementById("nomeResponsavel").value.trim();
+        const observacoes = document.getElementById("observacoes").value.trim();
+        const encomenda = document.getElementById("checkboxEncomenda").checked;
+        const tipo = encomenda ? "ENCOMENDA" : "RETIRADA";
+
+        const itens = Object.keys(carrinho).map(id => ({
+            produtoId: parseInt(id),
+            quantidade: carrinho[id].quantidade
+        }));
+
+        // ---------- VALIDAÇÕES BÁSICAS ----------
+        if (!nomeResponsavel) {
+            alert("Digite o nome do responsável.");
+            return;
+        }
+
+        if (itens.length === 0) {
+            alert("Selecione pelo menos um item.");
+            return;
+        }
+
+        if (!formaPagamento) {
+            alert("Selecione a forma de pagamento.");
+            return;
+        }
+
+        const botao = document.getElementById("botaoEnviar");
+        botao.disabled = true;
+        botao.textContent = "Enviando...";
+
+        try {
+            // 1) Cria o pedido "vazio" (o backend gera senha, culto e estação aqui)
+            //    Atenção: o campo é "pagamento", não "formaPagamento" — é assim
+            //    que a classe Pedido do backend chama esse campo.
+            const respostaPedido = await fetch("/pedidos", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nomeResponsavel,
+                    observacoes,
+                    tipo,
+                    pagamento: formaPagamento
+                })
+            });
+
+            if (!respostaPedido.ok) {
+                throw new Error("Erro ao criar pedido");
+            }
+
+            const pedidoCriado = await respostaPedido.json();
+
+            // 2) Agora que o pedido já tem um ID, adiciona os itens um por um.
+            //    Precisa ser depois, porque o endpoint de itens exige o ID do pedido.
+            for (const item of itens) {
+                const respostaItem = await fetch(`/pedidos/${pedidoCriado.id}/itens`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(item)
+                });
+
+                if (!respostaItem.ok) {
+                    throw new Error("Erro ao adicionar item ao pedido");
+                }
+            }
+
+            mostrarModalSucesso(pedidoCriado);
+
+        } catch (erro) {
+            console.error(erro);
+            alert("Erro ao enviar o pedido. Tente novamente.");
+            botao.disabled = false;
+            botao.textContent = "Enviar para cantina";
+        }
+    });
+
+    // ---------- MODAL DE SUCESSO ----------
+    function mostrarModalSucesso(data) {
+        const modal = document.getElementById("modalPedidoEnviado");
+        const senhaEl = document.getElementById("modalSenhaValor");
+        const tipoTexto = document.getElementById("modalTipoTexto");
+
+        senhaEl.textContent = "#" + String(data.senha).padStart(3, "0");
+
+        tipoTexto.textContent = (data.tipo === "ENCOMENDA")
+            ? "Encomenda registrada. Retire no horário combinado."
+            : "Aguarde a chamada na cozinha.";
+
+        modal.classList.add("visivel");
+    }
+
+    document.getElementById("modalOkBtn").addEventListener("click", () => {
+        window.location.reload();
+    });
+
+</script>
 
 </body>
 </html>
