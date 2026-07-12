@@ -63,6 +63,7 @@ public class PedidoService {
 
         estacao.setStatus(Estacao.StatusEstacao.LIVRE);
         estacao.setUltimaLiberacao(LocalDateTime.now());
+        estacaoService.salvar(estacao);
 
         Optional<Pedido> proximoPedido = pedidoRepository
                 .findTopByStatusOrderBySenhaAsc(Pedido.StatusPedido.AGUARDANDO);
@@ -70,16 +71,21 @@ public class PedidoService {
         if (proximoPedido.isPresent()) {
             Pedido proximo = proximoPedido.get();
 
-            proximo.setStatus(Pedido.StatusPedido.EM_PREPARO);
-            proximo.setEstacao(estacao);
+            Optional<Estacao> melhorEstacao = estacaoService.buscarMelhorEstacaoLivre();
 
-            estacao.setStatus(Estacao.StatusEstacao.OCUPADA);
+            if (melhorEstacao.isPresent()) {
+                Estacao escolhida = melhorEstacao.get();
+                proximo.setStatus(Pedido.StatusPedido.EM_PREPARO);
+                proximo.setEstacao(escolhida);
 
-            pedidoRepository.save(proximo);
+                escolhida.setStatus(Estacao.StatusEstacao.OCUPADA);
+                estacaoService.salvar(escolhida);
+
+                pedidoRepository.save(proximo);
+            }
         }
-        estacaoService.salvar(estacao);
-        return pedidoRepository.save(pedido);
 
+        return pedidoRepository.save(pedido);
     }
     public Pedido marcarComoEntregue(Long id){
         Pedido pedido = pedidoRepository.findById(id)
