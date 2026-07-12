@@ -17,23 +17,6 @@ public class PedidoController {
     private final PedidoService pedidoService;
     private final ItemPedidoService itemPedidoService;
 
-
-    @DeleteMapping("/limpar-testes")
-    public String limparPedidosDeTeste() {
-
-        pedidoService.limparPedidosDeTeste();
-
-        return "Pedidos de teste removidos e estações liberadas!";
-    }
-
-    @PostMapping("/popular")
-    public String popularBanco() {
-
-        pedidoService.popularBanco();
-
-        return "Banco populado com sucesso!";
-    }
-
     @PostMapping
     public Pedido criarPedido(@RequestBody Pedido pedido) {
 
