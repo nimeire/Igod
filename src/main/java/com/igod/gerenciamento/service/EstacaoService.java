@@ -4,10 +4,10 @@ import com.igod.gerenciamento.repository.EstacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
-import java.util.Comparator;
 import java.util.List;
 import com.igod.gerenciamento.model.Pedido;
 import com.igod.gerenciamento.repository.PedidoRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,11 +19,10 @@ public class EstacaoService {
         return estacaoRepository.findByStatus(Estacao.StatusEstacao.LIVRE);
     }
 
+    @Transactional
     public Optional<Estacao> buscarMelhorEstacaoLivre(){
-        List<Estacao> estacoesLivres = buscarEstacoesLivres();
-
-        return estacoesLivres.stream()
-                .min(Comparator.comparing(Estacao::getUltimaLiberacao));
+        List<Estacao> estacoesLivres = estacaoRepository.buscarEstacoesLivresComLock();
+        return estacoesLivres.stream().findFirst();
     }
 
     public Estacao salvar(Estacao estacao) {
