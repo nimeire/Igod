@@ -1,4 +1,4 @@
-# 🍔 IGod
+#  IGod
 
 Sistema de gerenciamento de cantina para igrejas.
 
