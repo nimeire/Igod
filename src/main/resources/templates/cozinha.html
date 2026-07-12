@@ -14,6 +14,9 @@
         <div class="estacao">
             Estação <span th:text="${estacaoId}"></span>
         </div>
+        <button class="botao-resetar" type="button" onclick="resetarEstacao()">
+            🔄 Resetar
+        </button>
     </header>
 
     <main class="conteudo">
@@ -72,17 +75,22 @@
 
 <script>
     function finalizarPedido(form) {
-
         const botao = form.querySelector("button");
-
         botao.disabled = true;
         botao.innerText = "FINALIZANDO...";
-
         setTimeout(() => {
             form.submit();
         }, 1000);
-
         return false;
+    }
+
+    function resetarEstacao() {
+        const estacaoId = /*[[${estacaoId}]]*/ null;
+
+        if (confirm("Tem certeza? Isso vai liberar a estação mesmo com pedido em andamento.")) {
+            fetch(`/estacoes/${estacaoId}/liberar`, { method: 'PATCH' })
+                .then(() => location.reload());
+        }
     }
 </script>
 </body>

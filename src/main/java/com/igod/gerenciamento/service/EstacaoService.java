@@ -3,6 +3,8 @@ import com.igod.gerenciamento.model.Estacao;
 import com.igod.gerenciamento.repository.EstacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 import com.igod.gerenciamento.model.Pedido;
@@ -37,5 +39,15 @@ public class EstacaoService {
                 estacao,
                 Pedido.StatusPedido.EM_PREPARO
         );
+    }
+
+    public Estacao liberarManualmente(Long id) {
+        Estacao estacao = estacaoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estação não encontrada"));
+
+        estacao.setStatus(Estacao.StatusEstacao.LIVRE);
+        estacao.setUltimaLiberacao(LocalDateTime.now());
+
+        return estacaoRepository.save(estacao);
     }
 }
