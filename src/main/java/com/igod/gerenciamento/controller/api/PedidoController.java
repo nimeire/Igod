@@ -7,7 +7,7 @@ import com.igod.gerenciamento.service.ItemPedidoService;
 import com.igod.gerenciamento.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Map;
 import java.util.List;
 
 @RestController
@@ -16,6 +16,11 @@ import java.util.List;
 public class PedidoController {
     private final PedidoService pedidoService;
     private final ItemPedidoService itemPedidoService;
+
+    @GetMapping("/relatorio/{cultoId}")
+    public Map<String, Object> gerarRelatorio(@PathVariable Long cultoId) {
+        return pedidoService.gerarRelatorio(cultoId);
+    }
 
     @PostMapping
     public Pedido criarPedido(@RequestBody Pedido pedido) {

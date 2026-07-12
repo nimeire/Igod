@@ -1,14 +1,15 @@
 package com.igod.gerenciamento.service;
-import com.igod.gerenciamento.dto.ItemPedidoRequest;
 import com.igod.gerenciamento.model.Estacao;
 import com.igod.gerenciamento.model.Pedido;
-import com.igod.gerenciamento.repository.EstacaoRepository;
-import com.igod.gerenciamento.repository.ItemPedidoRepository;
+import com.igod.gerenciamento.repository.CultoRepository;
 import com.igod.gerenciamento.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import com.igod.gerenciamento.model.Culto;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,8 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final EstacaoService estacaoService;
     private final CultoService cultoService;
-    private final ItemPedidoService itemPedidoService;
+    private final CultoRepository cultoRepository;
+
 
     @Transactional
     public Pedido criarPedido(Pedido pedido){
@@ -99,5 +101,26 @@ public class PedidoService {
 
     public List<Pedido> buscarPedidosPorStatus(Pedido.StatusPedido status){
         return pedidoRepository.findByStatus(status);
+    }
+
+    public Map<String, Object> gerarRelatorio(Long cultoId) {
+        Culto culto = cultoRepository.findById(cultoId)
+                .orElseThrow(() -> new RuntimeException("Culto não encontrado"));
+
+        List<Pedido> pedidosDoCulto = pedidoRepository.findByCulto(culto);
+
+        BigDecimal totalGeral = pedidosDoCulto.stream()
+                .map(Pedido::getTotal)
+                .filter(java.util.Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        Map<String, Object> relatorio = new HashMap<>();
+        relatorio.put("culto", culto.getNome());
+        relatorio.put("status", culto.getStatus());
+        relatorio.put("totalPedidos", pedidosDoCulto.size());
+        relatorio.put("totalArrecadado", totalGeral);
+        relatorio.put("pedidos", pedidosDoCulto);
+
+        return relatorio;
     }
 }
